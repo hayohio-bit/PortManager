@@ -6,7 +6,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![License](https://img.shields.io/badge/License-MIT-green)](./LICENSE)
-[![Release](https://img.shields.io/github/v/release/[계정]/PortManager)](https://github.com/[계정]/PortManager/releases/latest)
+[![Release](https://img.shields.io/github/v/release/hayohio-bit/PortManager)](https://github.com/hayohio-bit/PortManager/releases/latest)
 
 ---
 
@@ -47,30 +47,31 @@ Error: listen EADDRINUSE: address already in use :::3000
 
 ## 주요 기능
 
-| 기능 | 설명 |
-|------|------|
-| **실시간 포트 조회** | LISTEN 중인 TCP/UDP 포트를 전체 목록으로 표시 |
-| **통합 검색** | 포트 번호, 프로세스 이름, PID, 주소 동시 검색 (디바운싱 200ms 적용) |
-| **프로토콜 필터** | 전체 / TCP / UDP 탭으로 빠른 필터링 |
-| **컬럼 정렬** | 프로토콜, 주소, 포트, PID, 프로세스 이름 기준 오름/내림차순 정렬 |
-| **프로세스 종료** | Kill 버튼 클릭 → 확인 모달 → 강제 종료 (`taskkill /F`) |
-| **시스템 프로세스 보호** | Windows 커널 프로세스(PID 4 등) 종료 차단 |
-| **토스트 알림** | 성공/실패 결과를 화면 우측 하단에 3초간 표시 |
-| **포터블 실행** | 설치 없이 exe 하나로 즉시 실행 |
+| 기능                     | 설명                                                                |
+| ------------------------ | ------------------------------------------------------------------- |
+| **실시간 포트 조회**     | LISTEN 중인 TCP/UDP 포트를 전체 목록으로 표시                       |
+| **통합 검색**            | 포트 번호, 프로세스 이름, PID, 주소 동시 검색 (디바운싱 200ms 적용) |
+| **프로토콜 필터**        | 전체 / TCP / UDP 탭으로 빠른 필터링                                 |
+| **컬럼 정렬**            | 프로토콜, 주소, 포트, PID, 프로세스 이름 기준 오름/내림차순 정렬    |
+| **프로세스 종료**        | Kill 버튼 클릭 → 확인 모달 → 강제 종료 (`taskkill /F`)              |
+| **시스템 프로세스 보호** | Windows 커널 프로세스(PID 4 등) 종료 차단                           |
+| **토스트 알림**          | 성공/실패 결과를 화면 우측 하단에 3초간 표시                        |
+| **포터블 실행**          | 설치 없이 exe 하나로 즉시 실행                                      |
 
 ---
 
 ## 다운로드
 
-**[최신 릴리즈 다운로드 →](https://github.com/[계정]/PortManager/releases/latest)**
+**[최신 릴리즈 다운로드 →](https://github.com/hayohio-bit/PortManager/releases/latest)**
 
-| 파일 | 설명 |
-|------|------|
+| 파일                             | 설명                        |
+| -------------------------------- | --------------------------- |
 | `PortManager 1.0.0 Portable.exe` | 설치 불필요, 바로 실행 가능 |
 
 **시스템 요구사항**
+
 - Windows 10 / 11 (x64)
-- 관리자 권한 (UAC 승인 필요)
+- 일반 사용자 권한으로 실행 가능 (프로세스 종료 시에만 UAC 요청)
 
 ---
 
@@ -78,8 +79,8 @@ Error: listen EADDRINUSE: address already in use :::3000
 
 1. 위 링크에서 `PortManager x.x.x Portable.exe` 다운로드
 2. 파일을 더블클릭
-3. **Windows UAC 창에서 "예" 클릭** (포트 조회 및 프로세스 종료에 관리자 권한 필요)
-4. 앱이 실행되며 포트 목록이 자동으로 로드됩니다
+3. 앱이 실행되며 포트 목록이 자동으로 로드됩니다
+4. **프로세스 종료 시** Windows UAC 창이 나타납니다 — "예"를 클릭하면 해당 프로세스만 관리자 권한으로 종료됩니다
 
 > **Windows SmartScreen 경고가 뜨는 경우**
 > 코드 서명이 없는 exe에서 발생합니다.
@@ -150,9 +151,10 @@ TCP  0.0.0.0:5432  LISTENING 5678    "postgres","5678",...
 
 ```js
 // 두 명령어를 병렬 실행해 성능 최적화
+// chcp 65001: 한글 Windows(CP949) 환경에서도 UTF-8 출력을 강제하여 인코딩 문제 방지
 const [netstatResult, processMap] = await Promise.all([
-  execAsync('netstat -ano'),
-  getProcessMap(),        // tasklist 결과를 Map<PID, 이름>으로 변환
+  execAsync("chcp 65001 >nul 2>&1 && netstat -ano", { shell: true }),
+  getProcessMap(), // chcp 65001 && tasklist 결과를 Map<PID, 이름>으로 변환
 ]);
 ```
 
@@ -222,7 +224,7 @@ PortManager/
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/[계정]/PortManager.git
+git clone https://github.com/hayohio-bit/PortManager.git
 cd PortManager
 
 # 2. 의존성 설치
@@ -237,11 +239,11 @@ npm start
 
 ### 의존성
 
-| 패키지 | 버전 | 용도 |
-|--------|------|------|
-| `electron` | ^33.4.11 | 데스크톱 앱 프레임워크 |
-| `electron-builder` | ^25.1.8 | 배포용 exe 빌드 |
-| `@fontsource/inter` | ^5.2.8 | Inter 폰트 (로컬 번들링) |
+| 패키지              | 버전     | 용도                     |
+| ------------------- | -------- | ------------------------ |
+| `electron`          | ^33.4.11 | 데스크톱 앱 프레임워크   |
+| `electron-builder`  | ^25.1.8  | 배포용 exe 빌드          |
+| `@fontsource/inter` | ^5.2.8   | Inter 폰트 (로컬 번들링) |
 
 ---
 
@@ -270,7 +272,7 @@ dist/
 "build": {
   "win": {
     "target": ["portable"],
-    "requestedExecutionLevel": "requireAdministrator"
+    "requestedExecutionLevel": "asInvoker"
   },
   "portable": {
     "artifactName": "${productName} ${version} Portable.${ext}"
@@ -279,7 +281,7 @@ dist/
 }
 ```
 
-- **`requestedExecutionLevel: requireAdministrator`** — UAC 권한 요청을 실행 파일에 내장
+- **`requestedExecutionLevel: asInvoker`** — 앱 자체는 일반 권한으로 실행. 프로세스 종료 시에만 PowerShell을 통해 개별 명령에 대해 UAC를 요청하는 **하이브리드 권한 방식** 적용
 - **`asar: true`** — 소스 파일을 단일 아카이브로 패키징
 
 ---
@@ -304,9 +306,9 @@ webPreferences: {
 
 ```js
 // preload.js — 렌더러에 노출하는 API를 명시적으로 허용
-contextBridge.exposeInMainWorld('portAPI', {
-  getPorts:    () => ipcRenderer.invoke('ports:getAll'),
-  killProcess: (pid) => ipcRenderer.invoke('ports:kill', pid),
+contextBridge.exposeInMainWorld("portAPI", {
+  getPorts: () => ipcRenderer.invoke("ports:getAll"),
+  killProcess: (pid) => ipcRenderer.invoke("ports:kill", pid),
 });
 // 렌더러는 portAPI.getPorts(), portAPI.killProcess()만 사용 가능
 ```
@@ -317,17 +319,21 @@ contextBridge.exposeInMainWorld('portAPI', {
 // portService.js — PID는 반드시 정수 검증 후 사용
 const safePid = Number(pid);
 if (!Number.isInteger(safePid) || safePid <= 0) {
-  return { success: false, message: '유효하지 않은 PID입니다.' };
+  return { success: false, message: "유효하지 않은 PID입니다." };
 }
-await execAsync(`taskkill /PID ${safePid} /F`);
+// PowerShell Start-Process -Verb RunAs 로 해당 명령에만 관리자 권한 요청 (UAC 트리거)
+const command = `powershell -Command "Start-Process cmd -ArgumentList '/c taskkill /F /PID ${safePid}' -Verb RunAs -WindowStyle Hidden -Wait"`;
+await execAsync(command);
 ```
 
 ### Content Security Policy
 
 ```html
 <!-- index.html -->
-<meta http-equiv="Content-Security-Policy"
-  content="default-src 'self'; style-src 'self'; font-src 'self';">
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; style-src 'self'; font-src 'self';"
+/>
 ```
 
 인라인 스크립트, 외부 리소스 로딩을 모두 차단합니다.
@@ -337,7 +343,10 @@ await execAsync(`taskkill /PID ${safePid} /F`);
 ```js
 const PROTECTED_PIDS = new Set([4]); // Windows 커널 프로세스
 if (PROTECTED_PIDS.has(safePid)) {
-  return { success: false, message: '시스템 핵심 프로세스는 종료할 수 없습니다.' };
+  return {
+    success: false,
+    message: "시스템 핵심 프로세스는 종료할 수 없습니다.",
+  };
 }
 ```
 
@@ -349,11 +358,11 @@ if (PROTECTED_PIDS.has(safePid)) {
 
 ### 앱이 실행되지 않는 경우
 
-| 증상 | 원인 | 해결 |
-|------|------|------|
-| 아무 반응 없음 | UAC 창을 취소했거나 SmartScreen 차단 | SmartScreen: "추가 정보" → "실행" 클릭 |
-| 포트 목록이 비어있음 | 관리자 권한 없이 실행 | 우클릭 → "관리자 권한으로 실행" |
-| 프로세스 종료 실패 | 대상 프로세스가 더 높은 권한을 가짐 | 앱 자체를 관리자로 실행 |
+| 증상                 | 원인                                               | 해결                                                |
+| -------------------- | -------------------------------------------------- | --------------------------------------------------- |
+| 아무 반응 없음       | SmartScreen 차단                                   | "추가 정보" → "실행" 클릭                           |
+| 포트 목록이 비어있음 | 일부 시스템 포트를 조회할 권한 부족                | 우클릭 → "관리자 권한으로 실행"                     |
+| 프로세스 종료 실패   | UAC 창을 취소했거나 대상 프로세스의 권한이 더 높음 | UAC 창에서 "예" 클릭 / 앱을 관리자로 실행 후 재시도 |
 
 ### 빌드 실패 시
 
@@ -365,10 +374,10 @@ configuration.nsis has an unknown property 'requestedExecutionLevel'
 
 ```json
 // ❌ 잘못된 위치
-"nsis": { "requestedExecutionLevel": "requireAdministrator" }
+"nsis": { "requestedExecutionLevel": "asInvoker" }
 
 // ✅ 올바른 위치
-"win": { "requestedExecutionLevel": "requireAdministrator" }
+"win": { "requestedExecutionLevel": "asInvoker" }
 ```
 
 ---
