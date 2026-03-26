@@ -30,6 +30,8 @@
 
 ## 소개
 
+![프로그램 스크린샷](./docs/images/screenshot.png)
+
 개발하다 보면 포트 충돌이 자주 발생합니다.
 
 ```
@@ -355,30 +357,6 @@ if (PROTECTED_PIDS.has(safePid)) {
 ## 트러블슈팅
 
 자세한 내용은 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)를 참고하세요.
-
-### 앱이 실행되지 않는 경우
-
-| 증상                 | 원인                                               | 해결                                                |
-| -------------------- | -------------------------------------------------- | --------------------------------------------------- |
-| 아무 반응 없음       | SmartScreen 차단                                   | "추가 정보" → "실행" 클릭                           |
-| 포트 목록이 비어있음 | 일부 시스템 포트를 조회할 권한 부족                | 우클릭 → "관리자 권한으로 실행"                     |
-| 프로세스 종료 실패   | UAC 창을 취소했거나 대상 프로세스의 권한이 더 높음 | UAC 창에서 "예" 클릭 / 앱을 관리자로 실행 후 재시도 |
-
-### 빌드 실패 시
-
-```
-configuration.nsis has an unknown property 'requestedExecutionLevel'
-```
-
-`requestedExecutionLevel`이 `nsis` 섹션이 아닌 `win` 섹션에 있어야 합니다.
-
-```json
-// ❌ 잘못된 위치
-"nsis": { "requestedExecutionLevel": "asInvoker" }
-
-// ✅ 올바른 위치
-"win": { "requestedExecutionLevel": "asInvoker" }
-```
 
 ---
 
