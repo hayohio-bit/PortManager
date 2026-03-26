@@ -20,6 +20,7 @@ configuration object that does not match the API schema.
 이 옵션은 `win` 섹션에 위치해야 합니다.
 
 **잘못된 설정 (이전):**
+
 ```json
 "nsis": {
   "requestedExecutionLevel": "requireAdministrator"
@@ -27,6 +28,7 @@ configuration object that does not match the API schema.
 ```
 
 **올바른 설정 (현재):**
+
 ```json
 "win": {
   "requestedExecutionLevel": "requireAdministrator"
@@ -86,10 +88,12 @@ npm run build
 2. **프로세스 종료 클릭**: Windows UAC(사용자 계정 컨트롤) 창이 나타납니다. "예"를 클릭해야 프로세스가 강제 종료됩니다.
 
 인터넷이나 다른 PC에서 다운로드받은 `Portable.exe` 파일은 최초 실행 시 SmartScreen 경고가 나타날 수 있습니다.
-*(이전 버전에서는 실행이 차단되는 문제가 있었으나, 현재는 하이브리드 권한 방식을 적용하여 "실행" 클릭 시 정상적으로 앱이 구동됩니다.)*
+_(이전 버전에서는 실행이 차단되는 문제가 있었으나, 현재는 하이브리드 권한 방식을 적용하여 "실행" 클릭 시 정상적으로 앱이 구동됩니다.)_
 
 #### 해결 방법
+
 SmartScreen 경고창이 뜨면 다음과 같이 진행하세요:
+
 1. "추가 정보" 클릭
 2. "실행" 클릭
 
@@ -98,6 +102,7 @@ SmartScreen 경고창이 뜨면 다음과 같이 진행하세요:
 ### 만약 여전히 실행되지 않는다면? (차단 해제)
 
 드문 경우지만, Windows 정책에 따라 실행이 거부될 수 있습니다. 이 경우 파일의 수동 차단 해제가 필요합니다:
+
 1. `PortManager 1.0.0 Portable.exe` 파일을 **우클릭** -> **속성(R)** 클릭
 2. 일반 탭 하단의 보안 항목에서 **[차단 해제(K)]** 체크박스 선택
 3. **[적용]** 및 **[확인]** 클릭 후 앱 재실행
@@ -106,8 +111,8 @@ SmartScreen 경고창이 뜨면 다음과 같이 진행하세요:
 
 ## 빌드 스크립트 정리
 
-| 명령어 | 설명 |
-|--------|------|
-| `npm start` | 개발 모드로 앱 실행 |
-| `npm run build` | Windows용 포터블 exe 빌드 (`dist/` 출력) |
-| `npm run pack` | 설치 없이 디렉터리만 패키징 (`dist/win-unpacked/`) |
+| 명령어          | 설명                                               |
+| --------------- | -------------------------------------------------- |
+| `npm start`     | 개발 모드로 앱 실행                                |
+| `npm run build` | Windows용 포터블 exe 빌드 (`dist/` 출력)           |
+| `npm run pack`  | 설치 없이 디렉터리만 패키징 (`dist/win-unpacked/`) |
