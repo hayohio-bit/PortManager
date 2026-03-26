@@ -1,0 +1,53 @@
+{
+  "name": "port-manager",
+  "version": "1.0.0",
+  "description": "Windows 포트 관리 데스크톱 프로그램 - LISTEN 포트 조회 및 프로세스 종료",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "pack": "electron-builder --win --dir"
+  },
+  "author": "PortManager",
+  "license": "MIT",
+  "devDependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.portmanager.app",
+    "productName": "PortManager",
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "build/icon.png",
+      "requestedExecutionLevel": "asInvoker"
+    },
+
+    "portable": {
+      "unpackDirName": "PortManager-Portable",
+      "artifactName": "${productName} ${version} Portable.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PortManager",
+      "allowElevation": true
+    },
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "renderer/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  }
+}
+
