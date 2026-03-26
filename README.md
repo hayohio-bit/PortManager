@@ -406,4 +406,4 @@ chore:    빌드/설정 변경
 
 ## 라이선스
 
-[MIT License](./LICENSE) © 2025 PortManager
+[MIT License](./LICENSE) © 2026 PortManager
